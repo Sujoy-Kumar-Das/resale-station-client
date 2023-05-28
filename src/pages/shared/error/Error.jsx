@@ -1,17 +1,10 @@
 import React from "react";
-import errorImg from "../../../../public/error.jpg";
 import Header from "../header/Header";
-import { useLocation } from "react-router-dom";
+
 const Error = () => {
-  const location = useLocation();
-  const error = location;
-  console.log(error);
   return (
     <>
       <Header></Header>
-      {/*
-    Graphic from https://www.opendoodles.com/
-*/}
 
       <div className="grid h-screen px-4 bg-white place-content-center">
         <div className="text-center">

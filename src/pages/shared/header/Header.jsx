@@ -45,6 +45,9 @@ const Header = () => {
         <Navbar.Link as={Link} to="/">
           Home
         </Navbar.Link>
+        <Navbar.Link as={Link} to="/products/catagorys">
+          Products
+        </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   );

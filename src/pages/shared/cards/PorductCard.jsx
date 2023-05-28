@@ -16,7 +16,7 @@ const ProductCard = ({ image, description, title, rating, id }) => {
         <p className="font-normal text-gray-700 dark:text-gray-400">
           {description}
         </p>
-        <Link to={`product/catagory/detail/${id}`}>
+        <Link to={`/products/catagorys/allProducts/${id}`}>
           <Button gradientMonochrome="info">View Products</Button>
         </Link>
       </Card>

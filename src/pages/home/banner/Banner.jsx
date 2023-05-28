@@ -24,11 +24,11 @@ const Banner = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link>
+            <Link to={"/products/catagorys"}>
               <Button gradientDuoTone="purpleToBlue">Take a tour</Button>
             </Link>
-            <Link>
-              <Button gradientDuoTone="cyanToBlue">Learn more</Button>
+            <Link to={"/login"}>
+              <Button gradientDuoTone="cyanToBlue">Join us</Button>
             </Link>
           </div>
         </div>
