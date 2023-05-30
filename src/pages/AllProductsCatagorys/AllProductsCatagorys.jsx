@@ -1,8 +1,8 @@
 import { Button } from "flowbite-react";
 import React from "react";
 import { useQuery } from "react-query";
-import ProductCard from "../shared/cards/PorductCard";
 import Spiner from "../shared/spiner/Spiner";
+import ProductCard from "../shared/cards/ProductCard";
 
 const AllProductsCatagorys = () => {
   const { isLoading,data: products = [] } = useQuery({
@@ -20,7 +20,7 @@ const AllProductsCatagorys = () => {
     return <Spiner></Spiner>
   }
   return (
-    <section className=" my-20 px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
+    <section className=" mb-10 px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
       <header className="text-center">
         <h2 className="text-xl font-bold text-gray-900 sm:text-3xl">
           Available Brand's Collection's
@@ -36,6 +36,7 @@ const AllProductsCatagorys = () => {
             title={product.title}
             description={product.description}
             rating={product.rating}
+            
           ></ProductCard>
         ))}
       </div>

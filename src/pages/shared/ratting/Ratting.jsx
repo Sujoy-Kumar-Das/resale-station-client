@@ -57,13 +57,13 @@ const Ratting = ({ rating }) => {
             <FaStar />
           </p>
         </div>
-      ) : (
+      ) : rating === 1 ? (
         <div className=" flex text-yellow-200 text-xl">
           <p className=" me-1">
             <FaStar />
           </p>
         </div>
-      )}
+      ):""}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import Spiner from "../../shared/spiner/Spiner";
-import ProductCard from "../../shared/cards/PorductCard";
+import ProductCard from "../../shared/cards/ProductCard";
 import { Button } from "flowbite-react";
 
 import { FaBeer } from "@react-icons/all-files/fa/FaBeer";
@@ -49,6 +49,7 @@ const Products = () => {
               title={product.title}
               description={product.description}
               rating={product.rating}
+              button={"View Products"}
             ></ProductCard>
           ))}
         </div>
