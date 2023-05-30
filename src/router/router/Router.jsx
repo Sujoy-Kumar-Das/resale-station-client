@@ -5,6 +5,8 @@ import Login from "../../pages/registration/login/Login";
 import Error from "../../pages/shared/error/Error";
 import AllProductsCatagorys from "../../pages/AllProductsCatagorys/AllProductsCatagorys";
 import AllProducts from "../../pages/allProducts/AllProducts";
+import ProductDetail from "../../pages/productDetail/ProductDetail";
+
 
 export const route = createBrowserRouter([
   {
@@ -14,6 +16,7 @@ export const route = createBrowserRouter([
       { path: "/", element: <Home></Home> },
       {path:"/products/catagorys",element:<AllProductsCatagorys></AllProductsCatagorys>},
       {path:"/products/catagorys/allProducts/:id",element:<AllProducts></AllProducts>},
+      {path:"/products/detail/:id",element:<ProductDetail></ProductDetail>},
       { path: "/login", element: <Login></Login> },
     ],
   },

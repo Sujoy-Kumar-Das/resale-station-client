@@ -20,7 +20,7 @@ const AllProductsCard = ({ image, title,originalPrice,resalePrice,condition,  id
       <p className="font-normal text-gray-700 dark:text-gray-400">
         Resell Price:${resalePrice}
       </p>
-      <Link to={`/products/catagorys/allProducts/${id}`}>
+      <Link to={`/products/detail/${id}`}>
         <Button gradientMonochrome="info">Details</Button>
       </Link>
     </Card>
