@@ -37,7 +37,7 @@ const Header = () => {
           <Dropdown.Item>Settings</Dropdown.Item>
           <Dropdown.Item>Earnings</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item>Sign out</Dropdown.Item>
+          <Dropdown.Item><Link to={"/registration/login"}>Login</Link> </Dropdown.Item>
         </Dropdown>
         <Navbar.Toggle />
       </div>

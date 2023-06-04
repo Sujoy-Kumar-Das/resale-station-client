@@ -1,5 +1,6 @@
 import { Avatar, Table } from "flowbite-react";
 import React from "react";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 
 const SellerInfo = ({ productDetail }) => {
   const {
@@ -17,7 +18,11 @@ const SellerInfo = ({ productDetail }) => {
             Seller Photo
           </Table.Cell>
           <Table.Cell>
-            <Avatar img={seller_image} />
+            <PhotoProvider>
+              <PhotoView src={seller_image}>
+                <Avatar img={seller_image} />
+              </PhotoView>
+            </PhotoProvider>
           </Table.Cell>
         </Table.Row>
         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">

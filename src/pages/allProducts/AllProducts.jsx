@@ -2,8 +2,8 @@ import React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Spiner from "../shared/spiner/Spiner";
-// import ProductCard from "../shared/cards/ProductCard";
 import AllProductsCard from "./AllProductsCard";
+import BuyNowModal from "../productDetail/BuyNowModal";
 
 const AllProducts = () => {
   const params = useParams();
@@ -24,7 +24,6 @@ const AllProducts = () => {
   if (isLoading) {
     return <Spiner></Spiner>;
   }
-  console.log(products.products);
   return (
     <section className=" mb-10 px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
       <header className="text-center">
@@ -43,8 +42,8 @@ const AllProducts = () => {
           originalPrice={product.original_price}
           resalePrice = {product.resale_price}
           condition={product.condition}
+          productDetail={product}
           ></AllProductsCard>
-          {console.log(product)}
         </>
         ))}
       </div>

@@ -1,8 +1,12 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductConfigTable from "./ProductConfigTable";
 import SellerInfo from "./SellerInfo";
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import { Button } from "flowbite-react";
+import BuyNowModal from "./BuyNowModal";
+
 
 const ProductDetail = () => {
   const params = useParams();
@@ -20,18 +24,27 @@ const ProductDetail = () => {
       }
     },
   });
-  console.log(productDetail);
+
   const { image, model } = productDetail;
   return (
     <section className=" px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
-      <h5 className="text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
+      <h5 className="text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white my-5">
         Detail of {model} laptop
       </h5>
-      <img className=" mx-auto hover:opacity-20" src={image} alt="" />
-      <p className=" text-center text-xl mb-5">Configaration</p>
+
+      <PhotoProvider>
+        <PhotoView src={image}>
+          <img className=" mx-auto hover:opacity-20" src={image} alt="" />
+        </PhotoView>
+      </PhotoProvider>
+      <p className=" text-center text-xl my-5">Configaration</p>
       <ProductConfigTable productDetail={productDetail}></ProductConfigTable>
       <p className=" text-center text-xl my-5">Seller Information</p>
       <SellerInfo productDetail={productDetail}></SellerInfo>
+      <div className=" mt-5 flex justify-center"> 
+          <BuyNowModal productDetail={productDetail}></BuyNowModal>
+      </div>
+      
     </section>
   );
 };

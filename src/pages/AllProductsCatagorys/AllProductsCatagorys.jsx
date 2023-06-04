@@ -36,7 +36,7 @@ const AllProductsCatagorys = () => {
             title={product.title}
             description={product.description}
             rating={product.rating}
-            
+            product={product}
           ></ProductCard>
         ))}
       </div>
