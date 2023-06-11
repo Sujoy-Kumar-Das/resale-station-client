@@ -2,6 +2,7 @@ import { Label, TextInput } from "flowbite-react";
 import { Button } from "flowbite-react";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const ResetPassword = () => {
   const {
@@ -25,11 +26,30 @@ const ResetPassword = () => {
           <div className="mb-2 block">
             <Label htmlFor="email1" value="Your email" />
           </div>
-          <TextInput {...register("email")} id="email1" required type="email" />
+          <TextInput
+            color={errors?.email?.message && "failure"}
+            {...register("email", { required: "Invalid Email Address" })}
+            id="email1"
+            type="email"
+            placeholder={
+              errors?.email?.message
+                ? `${errors.email.message}`
+                : "Enter Your Email Address"
+            }
+          />
         </div>
 
         <Button type="submit">Reset Password</Button>
       </form>
+      <p className=" mt-3">
+        Return to 
+        <Link
+          className=" text-blue-600 underline hover:text-blue-800"
+          to={"/registration/login"}
+        >
+          login page
+        </Link>
+      </p>
     </div>
   );
 };

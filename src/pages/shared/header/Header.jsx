@@ -37,7 +37,10 @@ const Header = () => {
           <Dropdown.Item>Settings</Dropdown.Item>
           <Dropdown.Item>Earnings</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item><Link to={"/registration/login"}>Login</Link> </Dropdown.Item>
+          <Link to={"/registration/login"}>
+            {" "}
+            <Dropdown.Item> Login</Dropdown.Item>
+          </Link>
         </Dropdown>
         <Navbar.Toggle />
       </div>
