@@ -2,6 +2,7 @@ import { Button } from "flowbite-react";
 import React, { useContext } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
+import uploadUserInfo from "../../../commonFuntions/storeUserInfo";
 
 const Socila = ({ children }) => {
   const { singUpWithGoogle, singupWithGithub } =
@@ -10,7 +11,16 @@ const Socila = ({ children }) => {
   // google singup or login handler
   const handleGoogleLogin = () => {
     singUpWithGoogle()
-      .then((result) => console.log(result.user))
+      .then((result) => {
+        const user = result.user;
+
+        const userInfo = {
+          email: user.email,
+          name: user.displayName,
+          role: "buyer",
+        };
+        uploadUserInfo(userInfo);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -19,7 +29,12 @@ const Socila = ({ children }) => {
     singupWithGithub()
       .then((result) => {
         const user = result.user;
-        console.log(user);
+        const userInfo = {
+          email: user?.email,
+          name: user?.displayName,
+          role: "buyer",
+        };
+        uploadUserInfo(userInfo);
       })
       .catch((err) => console.log(err));
   };

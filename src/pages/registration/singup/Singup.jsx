@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -10,16 +10,109 @@ import {
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import Socila from "../socialLogin/Social";
+import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
+import { toast } from "react-hot-toast";
+import uploadUserInfo from "../../../commonFuntions/storeUserInfo";
+import storeUserInfo from "../../../commonFuntions/storeUserInfo";
 
 const Singup = () => {
-  const [accept, setAccept] = useState(true);
+  const [accept, setAccept] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [firebaseErr, setFirebaseErr] = useState("");
+  const { singupWithEmailAndPass, updateUser } =
+    useContext(AuthContextProvider);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleSingup = (data) => {
-    console.log(data);
+
+  // validate image file type funtion
+  const validateImgage = (file) => {
+    const allowedExtantions = ["image/png", "image/jpg", "image/jpeg"];
+    if (!allowedExtantions.includes(file[0].type)) {
+      return "File does not support. You must use .png or .jpg or jpeg";
+    } else {
+      return true;
+    }
+  };
+  // validate password validation
+  const validatePassword = (password) => {
+    if (!password) {
+      return "Password is required";
+    }
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!/[A-Z]/.test(password)) {
+      return "Password must contain at least one uppercase letter";
+    }
+    if (!/[a-z]/.test(password)) {
+      return "Password must contain at least one lowercase letter";
+    }
+    if (!/[0-9]/.test(password)) {
+      return "Password must contain at least one digit";
+    }
+    if (!/^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/.test(password)) {
+      return "Password must contain at least one special charecter";
+    }
+    return true;
+  };
+  // create user fundtion handler
+  const handleSingup = async (data, event) => {
+    setLoading(true);
+    const storeUserInfo = {
+      name: data.name,
+      email: data.email,
+      role: data.role,
+    };
+
+    const imageURL = await uploadImage(data.image);
+    singupWithEmailAndPass(data.email, data.password)
+      .then(() => {
+        updateUserInfo(data.name, imageURL);
+        uploadUserInfo(storeUserInfo);
+        setFirebaseErr("");
+        setLoading(false);
+        setAccept(false);
+        event.target.reset();
+      })
+      .catch((error) => {
+        setFirebaseErr(error.message);
+        setLoading(false);
+      });
+  };
+  // upload image funtion
+  const uploadImage = async (image) => {
+    const imageFile = image[0];
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    const res = await fetch(
+      `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_REACT_APP_imgApi_key
+      }`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const imageData = await res.json();
+    if (imageData.success) {
+      return imageData.data.display_url;
+    }
+  };
+  // update user funtion
+  const updateUserInfo = (name, imageURL) => {
+    const userInfo = {
+      displayName: name,
+      photoURL: imageURL,
+    };
+    updateUser(userInfo)
+      .then(() => {})
+      .catch((error) => {
+        setFirebaseErr(error.message);
+        setLoading(false);
+      });
   };
   return (
     <div className=" w-4/5 lg:w-1/3 mx-auto mt-16 pb-3">
@@ -57,7 +150,6 @@ const Singup = () => {
             {errors?.role?.message}
           </p>
         )}
-        {console.log()}
         <div>
           <div className="mb-2 block">
             <Label htmlFor="name" value="Your Name" />
@@ -76,17 +168,19 @@ const Singup = () => {
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="file" value="Attach Your Photo" />
+            <Label htmlFor="image" value="Attach Your Photo" />
           </div>
           <FileInput
             helperText={errors?.file?.message && `${errors.file.message}`}
             id="file"
             color={errors?.file?.message && "failure"}
-            {...register("file", {
+            {...register("image", {
               required:
                 "A profile picture is useful to confirm your are logged into your account",
+              validate: validateImgage,
             })}
           />
+          <p className=" text-red-600 mt-1">{errors?.image?.message}</p>
         </div>
         <div>
           <div className="mb-2 block">
@@ -104,6 +198,12 @@ const Singup = () => {
             }
           />
         </div>
+        {firebaseErr && (
+          <p className=" text-red-600">
+            {firebaseErr === "Firebase: Error (auth/email-already-in-use)." &&
+              "This email address already had a account"}
+          </p>
+        )}
         <div>
           <div className="mb-2 block">
             <Label htmlFor="password" value="Your password" />
@@ -112,24 +212,38 @@ const Singup = () => {
             id="password"
             color={errors?.password?.message && "failure"}
             {...register("password", {
-              required: "Password is required.",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters long.",
-              },
-              pattern: {
-                value:
-                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
-                message:
-                  "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.",
-              },
+              validate: validatePassword,
             })}
             placeholder="Enter Your Password"
             type="password"
           />
+
           <p className=" text-red-600 mt-1">{errors?.password?.message}</p>
         </div>
-        <Button type="submit">Sing Up</Button>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            onClick={() => {
+              setAccept(!accept);
+            }}
+            id="agree"
+          />
+          <Label className="flex" htmlFor="agree">
+            <p>I agree with the</p>
+            <Link
+              className="text-cyan-600 hover:underline dark:text-cyan-500"
+              href="/forms"
+            >
+              <p>terms and conditions</p>
+            </Link>
+          </Label>
+        </div>
+        {!loading ? (
+          <Button disabled={!accept} type="submit">
+            Sing Up
+          </Button>
+        ) : (
+          <Button isProcessing>Account Createing</Button>
+        )}
       </form>
       <p className=" mt-3">
         Already have an account ? Please{" "}

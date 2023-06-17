@@ -1,16 +1,30 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import Socila from "../socialLogin/Social";
+import { AuthContextProvider } from "../../../contexts/authContext/AuthContext";
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const {loginWithEmailAndPass} = useContext(AuthContextProvider)
+
+  const [firebaseErr,setFirebaseErr] = useState("")
+
+  // login handler
   const handleLogin = (data) => {
-    console.log(data);
+    loginWithEmailAndPass(data.email,data.password)
+    .then(result =>{
+      const user = result.user;
+      console.log(user)
+    })
+    .catch(err => {
+      console.log(err)
+      setFirebaseErr(err.message)
+    })
   };
 
   return (
@@ -54,6 +68,7 @@ const Login = () => {
             type="password"
           />
         </div>
+        {firebaseErr && <p>{firebaseErr === "Firebase: Error (auth/wrong-password)." ? "Wrong password": firebaseErr === "Firebase: Error (auth/user-not-found)."?"This email address doesn't exist":firebaseErr}</p>}
         <Button type="submit">Login</Button>
       </form>
 
